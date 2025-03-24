@@ -1,69 +1,45 @@
-# Dijital Termometre Projesi (Arduino + DHT11)
+# Dijital Termometre Projesi (Arduino + LM35 + LCD)
 
-Bu projede DHT11 sıcaklık ve nem sensörü kullanılarak ortamdaki değerler ölçülmüş ve Arduino UNO ile seri monitör üzerinden kullanıcıya aktarılmıştır. Gömülü sistemler alanında temel uygulama örneği olarak tasarlanmıştır.
-
-## Proje Amacı
-
-- Sensör verilerini okuyabilmek
-- Seri iletişim ile ölçüm verilerini göstermek
-- Arduino ortamında temel kod yazma pratiği kazanmak
+Bu projede LM35 sıcaklık sensörü ile ortam sıcaklığı ölçülerek, 2x16 LCD ekran üzerinde anlık, minimum ve maksimum sıcaklıklar gösterilmiştir. Belirlenen eşik değerinin üzerinde sıcaklık ölçüldüğünde ekranda "YÜKSEK SICAKLIK!" uyarısı verilir.
 
 ## Kullanılan Donanım
 
-- Arduino UNO
-- DHT11 sıcaklık ve nem sensörü
+- Arduino MEGA 2560 R3
+- LM35 Sıcaklık Sensörü
+- LCD 2x16 Ekran (I2C modülü ile)
 - Breadboard ve jumper kablolar
-- (İsteğe bağlı) 16x2 LCD ekran
 
-## Yazılım ve Kütüphaneler
+## Özellikler
 
-- Arduino IDE
-- Adafruit DHT Sensor Library
+- Anlık sıcaklık değeri (°C) LCD üzerinde gösterilir  
+- Minimum ve maksimum sıcaklıklar anlık takip edilir  
+- 30°C üzeri sıcaklıkta görsel uyarı verilir  
+- Basit bağlantılar ve az parça ile kolay kurulum
 
-## Öğrenilen Beceriler
+## Bağlantılar
 
-- Dijital sensör ile veri okuma
-- Seri port üzerinden veri aktarımı
-- Arduino ile temel programlama yapıları (if, delay, loop)
-- Sensör kontrolü ve hata yönetimi (isnan kullanımı)
+**LM35 Bağlantısı**
+- VCC → 5V
+- GND → GND
+- OUT → A0
 
-## Koddan Örnek
+**LCD I2C Bağlantısı (MEGA için)**
+- SDA → 20
+- SCL → 21
 
-```cpp
-#include <DHT.h>
-#define DHTPIN 2
-#define DHTTYPE DHT11
-DHT dht(DHTPIN, DHTTYPE);
+## Arduino IDE Kullanımı
 
-void setup() {
-  Serial.begin(9600);
-  dht.begin();
-}
+1. `LiquidCrystal_I2C` kütüphanesini Library Manager'dan kur
+2. Kodları Arduino IDE'ye yükle
+3. Seri monitöre ihtiyaç olmadan LCD üzerinden değerleri gözlemle
 
-void loop() {
-  float temp = dht.readTemperature();
-  float hum = dht.readHumidity();
+## Proje Geliştirme Fikirleri
 
-  if (isnan(temp) || isnan(hum)) {
-    Serial.println("Sensor okunamadi!");
-    return;
-  }
+- Fan kontrolü (30°C üstü fanı aç)
+- SD kart modülü ile veri kaydı
+- Bluetooth üzerinden veri aktarımı
 
-  Serial.print("Sicaklik: ");
-  Serial.print(temp);
-  Serial.print(" °C, Nem: ");
-  Serial.print(hum);
-  Serial.println(" %");
-  delay(2000);
-}
+## Hazırlayan
 
-Geliştirme Fikirleri
-LCD ekran üzerinden anlık verileri göstermek
-
-ESP32 ile Wi-Fi bağlantısı kurarak verileri web arayüzüne aktarmak
-
-SD kart modülüyle ölçüm kayıtlarını loglamak
-
-Hazırlayan
-Ahmet Emin Yakar
-LinkedIn: linkedin.com/in/ahmet-emin-yakar-bbb6732a6
+Ahmet Emin Yakar  
+[LinkedIn Profilim](https://www.linkedin.com/in/ahmet-emin-yakar-bbb6732a6)
